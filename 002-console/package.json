@@ -1,0 +1,27 @@
+{
+  "name": "002-console",
+  "version": "1.0.0",
+  "description": "console homework",
+  "main": "index.js",
+  "bin": {
+    "get-time": "./task1.js",
+    "play-game": "./task2.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IlyaZyablov/002-console.git"
+  },
+  "author": "IlyaZyablov",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/IlyaZyablov/002-console/issues"
+  },
+  "homepage": "https://github.com/IlyaZyablov/002-console#readme",
+  "dependencies": {
+    "readline": "^1.3.0",
+    "yargs": "^17.7.2"
+  }
+}
