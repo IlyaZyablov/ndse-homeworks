@@ -1,0 +1,1 @@
+[{"id":1,"result":"lose"},{"id":2,"result":"lose"},{"id":3,"result":"lose"},{"id":4,"result":"win"},{"id":5,"result":"win"}]
