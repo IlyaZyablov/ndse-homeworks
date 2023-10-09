@@ -7,4 +7,10 @@ const indexRouter = express.Router();
 indexRouter.use('/books', booksRouter);
 indexRouter.use('/user', userRouter);
 
+indexRouter.get('/', (req, res) => {
+  res.render('index', {
+    title: 'Главная',
+  });
+});
+
 export default indexRouter;

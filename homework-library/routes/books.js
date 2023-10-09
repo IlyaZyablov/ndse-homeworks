@@ -10,7 +10,10 @@ const __dirname = path.dirname(__filename);
 const booksRouter = express.Router();
 
 booksRouter.get('/', (req, res) => {
-  res.json(Database.books);
+  res.render('books/index', {
+    title: 'Список книг',
+    books: Database.books,
+  });
 });
 
 booksRouter.get('/:id', (req, res) => {
@@ -18,30 +21,53 @@ booksRouter.get('/:id', (req, res) => {
   const idx = Database.books.findIndex(el => el.id === id);
 
   if (idx !== -1) {
-    res.json(Database.books[idx]);
+    res.render('books/view', {
+      title: Database.books[idx].title,
+      book: Database.books[idx],
+    });
   } else {
-    res.status(404);
-    res.json('404 | Книга не найдена!');
+    res.render('errors/404', {
+      title: 'Ошибка!',
+      text: 'Книга не найдена!',
+    });
   }
 });
 
 booksRouter.post('/', uploadFile.single('fileBook'), (req, res) => {
   const {
-    title, description, authors, fileCover, fileName,
+    title, description, authors, fileCover,
   } = req.body;
 
   if (req.file) {
-    const newBook = Database.addBook(title, description, authors, fileCover, fileName, req.file.originalname);
+    Database.addBook(title, description, authors, fileCover, req.file.originalname, req.file.filename);
 
-    res.status(201);
-    res.json(newBook);
+    res.redirect('/books');
   } else {
-    res.status(404);
-    res.json('404 | Необходимо добавить файл книги!');
+    res.render('errors/404', {
+      title: 'Ошибка!',
+      text: 'Необходимо добавить файл книги!',
+    });
   }
 });
 
-booksRouter.put('/:id', (req, res) => {
+booksRouter.get('/update/:id', (req, res) => {
+  const { id } = req.params;
+  const idx = Database.books.findIndex(el => el.id === id);
+
+  if (idx !== -1) {
+    res.render('books/update', {
+      title: Database.books[idx].title,
+      book: Database.books[idx],
+    });
+  } else {
+    res.render('errors/404', {
+      title: 'Ошибка!',
+      text: 'Книга не найдена!',
+    });
+  }
+});
+
+booksRouter.post('/update/:id', (req, res) => {
   const { id } = req.params;
   const idx = Database.books.findIndex(el => el.id === id);
 
@@ -56,23 +82,27 @@ booksRouter.put('/:id', (req, res) => {
       }
     }
 
-    res.json(Database.books[idx]);
+    res.redirect('/books');
   } else {
-    res.status(404);
-    res.json('404 | Книга не найдена!');
+    res.render('errors/404', {
+      title: 'Ошибка!',
+      text: 'Книга не найдена!',
+    });
   }
 });
 
-booksRouter.delete('/:id', (req, res) => {
+booksRouter.post('/delete/:id', (req, res) => {
   const { id } = req.params;
   const idx = Database.books.findIndex(el => el.id === id);
 
   if (idx !== -1) {
     Database.books.splice(idx, 1);
-    res.json('Книга успешно удалена!');
+    res.redirect('/books');
   } else {
-    res.status(404);
-    res.json('404 | Книга не найдена!');
+    res.render('errors/404', {
+      title: 'Ошибка!',
+      text: 'Книга не найдена!',
+    });
   }
 });
 
@@ -85,13 +115,13 @@ booksRouter.get('/:id/download', (req, res) => {
       if (error) {
         console.log('[ERROR] Download book:');
         console.error(error);
-      } else {
-        res.json(`Книга ${Database.books[idx].fileBook} успешно загружена!`);
       }
     });
   } else {
-    res.status(404);
-    res.json('404 | Книга не найдена!');
+    res.render('errors/404', {
+      title: 'Ошибка!',
+      text: 'Книга не найдена!',
+    });
   }
 });
 

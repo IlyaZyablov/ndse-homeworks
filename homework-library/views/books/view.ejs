@@ -1,0 +1,24 @@
+<%- include('../port/layout-start', { title: title }) %>
+<%- include('../port/menu', { title: title, addBookBtn: false }) %>
+
+<div class="card">
+  <div class="card-body">
+    <h5 class="card-title"><%= book.title %></h5>
+    <p class="card-text"><%= book.description %></p>
+  </div>
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item">Автор (-ы): <%= book.authors %></li>
+    <li class="list-group-item">Обложка: <%= book.fileCover %></li>
+    <li class="list-group-item">Загруженный файл: <%= book.fileName %></li>
+  </ul>
+  <div class="card-body">
+    <a href="/books/<%= book.id %>/download" class="card-link">
+      <button class="btn btn-outline-primary" type="button">Скачать</button>
+    </a>
+    <a href="/books" class="card-link">
+      <button class="btn btn-outline-primary" type="button">Назад</button>
+    </a>
+  </div>
+</div>
+
+<%- include('../port/layout-end') %>

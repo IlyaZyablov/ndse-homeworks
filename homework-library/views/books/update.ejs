@@ -1,0 +1,26 @@
+<%- include('../port/layout-start', { title: title }) %>
+<%- include('../port/menu', { title: title, addBookBtn: false }) %>
+
+<form method="POST" class="row">
+  <div class="mb-3">
+    <label for="title" class="form-label">Название книги</label>
+    <input type="text" name="title" class="form-control" id="title" placeholder="Введите название книги" value="<%= book.title %>" required>
+  </div>
+  <div class="mb-3">
+    <label for="description" class="form-label">Описание</label>
+    <textarea class="form-control" name="description" id="description" rows="3" placeholder="Введите описание" required><%= book.description %></textarea>
+  </div>
+  <div class="mb-3">
+    <label for="authors" class="form-label">Автор (-ы)</label>
+    <input type="text" name="authors" class="form-control" id="authors" placeholder="Введите имя автора" value="<%= book.authors %>" required>
+  </div>
+  <div class="mb-3">
+    <label for="fileCover" class="form-label">Обложка</label>
+    <input type="text" name="fileCover" class="form-control" id="fileCover" placeholder="Опишите обложку" value="<%= book.fileCover %>" required>
+  </div>
+  <div class="mb-3">
+    <button type="submit" class="btn btn-primary">Отправить</button>
+  </div>
+</form>
+
+<%- include('../port/layout-end') %>

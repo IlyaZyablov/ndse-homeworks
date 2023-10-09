@@ -1,0 +1,64 @@
+<nav class="navbar navbar-expand-lg navbar-light mt-2 mb-2" style="background-color: #e3f2fd;">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/">Главная</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link" href="/books">Список книг</a>
+        </li>
+      </ul>
+      <% if(addBookBtn) { %>
+        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addBookModal">
+          Добавить книгу
+        </button>
+      <% } %>
+    </div>
+  </div>
+</nav>
+
+<h1><%= title %></h1>
+
+<% if(addBookBtn) { %>
+  <div class="modal fade" id="addBookModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Добавить книгу</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form method="POST" class="row" enctype="multipart/form-data">
+            <div class="mb-3">
+              <label for="title" class="form-label">Название книги</label>
+              <input type="text" name="title" class="form-control" id="title" placeholder="Введите название книги" required>
+            </div>
+            <div class="mb-3">
+              <label for="description" class="form-label">Описание</label>
+              <textarea class="form-control" name="description" id="description" rows="3" placeholder="Введите описание" required></textarea>
+            </div>
+            <div class="mb-3">
+              <label for="authors" class="form-label">Автор (-ы)</label>
+              <input type="text" name="authors" class="form-control" id="authors" placeholder="Введите имя автора" required>
+            </div>
+            <div class="mb-3">
+              <label for="fileCover" class="form-label">Обложка</label>
+              <input type="text" name="fileCover" class="form-control" id="fileCover" placeholder="Опишите обложку" required>
+            </div>
+            <div class="mb-3">
+              <label for="fileBook" class="form-label">Файл</label>
+              <input type="file" name="fileBook" class="form-control" id="fileBook" required>
+            </div>
+            <div class="mb-3">
+              <button type="submit" class="btn btn-primary">Отправить</button>
+              <button type="reset" class="btn btn-secondary">Очистить</button>
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+<% } %>
