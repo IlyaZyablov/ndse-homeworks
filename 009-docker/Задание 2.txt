@@ -1,0 +1,45 @@
+PS D:\PROG\zyablov_netology\docker-test> docker pull node
+Using default tag: latest
+latest: Pulling from library/node
+167b8a53ca45: Pull complete
+b47a222d28fa: Pull complete
+debce5f9f3a9: Pull complete
+1d7ca7cd2e06: Pull complete
+94c7791033e8: Pull complete
+c72c41e7648d: Pull complete
+24b3fec6157f: Pull complete
+ba7d01e69714: Pull complete
+Digest: sha256:6b3f9aa7eefa8d4c93d43914e78aa2bfea9a12808b0059e5da78854dfa8b8768
+Status: Downloaded newer image for node:latest
+docker.io/library/node:latest
+
+What's Next?
+  View a summary of image vulnerabilities and recommendations → docker scout quickview node
+
+PS D:\PROG\zyablov_netology\docker-test> docker run --name mynode -it -e NAME='Ilya' -e SURNAME='Zyablov' node
+Welcome to Node.js v20.8.0.
+Type ".help" for more information.
+> console.log(`Привет, ${process.env.NAME} ${process.env.SURNAME}`);
+Привет, Ilya Zyablov
+undefined
+>
+(To exit, press Ctrl+C again or Ctrl+D or type .exit)
+>
+
+PS D:\PROG\zyablov_netology\docker-test> docker rm -f mynode
+mynode
+
+PS D:\PROG\zyablov_netology\docker-test> docker rmi node
+Untagged: node:latest
+Untagged: node@sha256:6b3f9aa7eefa8d4c93d43914e78aa2bfea9a12808b0059e5da78854dfa8b8768
+Deleted: sha256:7828fdf71577e0d266f905d26d27e46ac418ac2fa8fc05a78ad01c8811b7abb6
+Deleted: sha256:1c774cfebfbe089b7a45cf66d2458f1765cdbb0936bc9d684948a5de40b3943b
+Deleted: sha256:cd69e19a137537a7028333cc37b2703aadfe39f240e91c565c0b200eb055959f
+Deleted: sha256:3a95aa34bea45da0df9eb735952d3e2107f6bae20947d767e1c913913da80d9d
+Deleted: sha256:295c7a4d31a99f891987a5d5fb97cdf1c8212b7c170eb0e860c8b23dbccc6f0f
+Deleted: sha256:3382bea0617cd484ec676f6942b0ba2a89aba3f780f664d45b1703d80e0f92a5
+Deleted: sha256:cb1fa8b4f1a65c7e07ad0609926c331536d4cc9572d62ac801f9dd5a38140bc4
+Deleted: sha256:ccbecb7ab1ffe3c79a42e78eeb9a211e449a900e76c0991d32be592f5a4b1853
+Deleted: sha256:7c85cfa30cb11b7606c0ee84c713a8f6c9faad7cb7ba92f1f33ba36d4731cc82
+
+PS D:\PROG\zyablov_netology\docker-test>
