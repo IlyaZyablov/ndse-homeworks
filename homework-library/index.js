@@ -1,6 +1,10 @@
 import express from 'express';
+import { config } from 'dotenv';
+import mongoose from 'mongoose';
 
 import indexRouter from './routes/index.js';
+
+config();
 
 const app = express();
 
@@ -12,6 +16,17 @@ app.use('/', indexRouter);
 
 const PORT = process.env.PORT || 3000;
 
-app.listen(PORT, () => {
-  console.log(`Server started at port ${PORT}`);
-});
+async function mongoConnect(url) {
+  try {
+    await mongoose.connect(url);
+
+    app.listen(PORT, () => {
+      console.log(`Server started at port ${PORT}`);
+    });
+  } catch (error) {
+    console.log('[ERROR]: Database connect error:');
+    console.error(error);
+  }
+}
+
+mongoConnect(process.env.MONGO_URL);

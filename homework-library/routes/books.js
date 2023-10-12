@@ -1,7 +1,7 @@
 import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import Database from '../database/index.js';
+import BooksDB from '../database/models/books_schema.js';
 import uploadFile from '../middleware/file.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -9,23 +9,35 @@ const __dirname = path.dirname(__filename);
 
 const booksRouter = express.Router();
 
-booksRouter.get('/', (req, res) => {
-  res.render('books/index', {
-    title: 'Список книг',
-    books: Database.books,
-  });
+booksRouter.get('/', async (req, res) => {
+  try {
+    const books = await BooksDB.find().select('-__v');
+
+    res.render('books/index', {
+      title: 'Список книг',
+      books,
+    });
+  } catch (error) {
+    console.error(error);
+    res.render('errors/404', {
+      title: 'Ошибка!',
+      text: 'Ошибка при загрузке книг!',
+    });
+  }
 });
 
-booksRouter.get('/:id', (req, res) => {
+booksRouter.get('/:id', async (req, res) => {
   const { id } = req.params;
-  const idx = Database.books.findIndex(el => el.id === id);
 
-  if (idx !== -1) {
+  try {
+    const book = await BooksDB.findById(id).select('-__v');
+
     res.render('books/view', {
-      title: Database.books[idx].title,
-      book: Database.books[idx],
+      title: book.title,
+      book,
     });
-  } else {
+  } catch (error) {
+    console.error(error);
     res.render('errors/404', {
       title: 'Ошибка!',
       text: 'Книга не найдена!',
@@ -33,15 +45,32 @@ booksRouter.get('/:id', (req, res) => {
   }
 });
 
-booksRouter.post('/', uploadFile.single('fileBook'), (req, res) => {
+booksRouter.post('/', uploadFile.single('fileBook'), async (req, res) => {
   const {
     title, description, authors, fileCover,
   } = req.body;
 
   if (req.file) {
-    Database.addBook(title, description, authors, fileCover, req.file.originalname, req.file.filename);
+    const newBook = new BooksDB({
+      title,
+      description,
+      authors,
+      fileCover,
+      fileName: req.file.originalname,
+      fileBook: req.file.filename,
+    });
 
-    res.redirect('/books');
+    try {
+      await newBook.save();
+
+      res.redirect('/books');
+    } catch (error) {
+      console.error(error);
+      res.render('errors/404', {
+        title: 'Ошибка!',
+        text: 'Возникла ошибка при добавлении книги!',
+      });
+    }
   } else {
     res.render('errors/404', {
       title: 'Ошибка!',
@@ -50,16 +79,18 @@ booksRouter.post('/', uploadFile.single('fileBook'), (req, res) => {
   }
 });
 
-booksRouter.get('/update/:id', (req, res) => {
+booksRouter.get('/update/:id', async (req, res) => {
   const { id } = req.params;
-  const idx = Database.books.findIndex(el => el.id === id);
 
-  if (idx !== -1) {
+  try {
+    const book = await BooksDB.findById(id).select('-__v');
+
     res.render('books/update', {
-      title: Database.books[idx].title,
-      book: Database.books[idx],
+      title: book.title,
+      book,
     });
-  } else {
+  } catch (error) {
+    console.error(error);
     res.render('errors/404', {
       title: 'Ошибка!',
       text: 'Книга не найдена!',
@@ -67,57 +98,61 @@ booksRouter.get('/update/:id', (req, res) => {
   }
 });
 
-booksRouter.post('/update/:id', (req, res) => {
+booksRouter.post('/update/:id', async (req, res) => {
   const { id } = req.params;
-  const idx = Database.books.findIndex(el => el.id === id);
 
-  if (idx !== -1) {
-    for (const key in req.body) {
-      if (Object.prototype.hasOwnProperty.call(req.body, key)) {
-        const element = req.body[key];
-        Database.books[idx] = {
-          ...Database.books[idx],
-          [key]: element,
-        };
-      }
-    }
+  const {
+    title, description, authors, fileCover,
+  } = req.body;
+
+  try {
+    await BooksDB.findByIdAndUpdate(id, {
+      title,
+      description,
+      authors,
+      fileCover,
+    });
 
     res.redirect('/books');
-  } else {
+  } catch (error) {
+    console.error(error);
     res.render('errors/404', {
       title: 'Ошибка!',
-      text: 'Книга не найдена!',
+      text: 'Возникла ошибка при обновлении книги!',
     });
   }
 });
 
-booksRouter.post('/delete/:id', (req, res) => {
+booksRouter.post('/delete/:id', async (req, res) => {
   const { id } = req.params;
-  const idx = Database.books.findIndex(el => el.id === id);
 
-  if (idx !== -1) {
-    Database.books.splice(idx, 1);
+  try {
+    await BooksDB.findByIdAndDelete(id);
+
     res.redirect('/books');
-  } else {
+  } catch (error) {
+    console.error(error);
     res.render('errors/404', {
       title: 'Ошибка!',
-      text: 'Книга не найдена!',
+      text: 'Возникла ошибка при удалении книги!',
     });
   }
 });
 
-booksRouter.get('/:id/download', (req, res) => {
+booksRouter.get('/:id/download', async (req, res) => {
   const { id } = req.params;
-  const idx = Database.books.findIndex(el => el.id === id);
 
-  if (idx !== -1) {
-    res.download(path.join(__dirname, '..', `public/books/${Database.books[idx].fileBook}`), error => {
+  try {
+    const book = await BooksDB.findById(id).select('fileBook');
+
+    res.download(path.join(__dirname, '..', `public/books/${book.fileBook}`), error => {
       if (error) {
         console.log('[ERROR] Download book:');
         console.error(error);
       }
     });
-  } else {
+  } catch (error) {
+    console.error(error);
     res.render('errors/404', {
       title: 'Ошибка!',
       text: 'Книга не найдена!',
