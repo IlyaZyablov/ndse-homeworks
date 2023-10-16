@@ -1,6 +1,8 @@
 import express from 'express';
 import { config } from 'dotenv';
 import mongoose from 'mongoose';
+import passport from 'passport';
+import session from 'express-session';
 
 import indexRouter from './routes/index.js';
 
@@ -11,6 +13,10 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded());
 app.set('view engine', 'ejs');
+app.use(session({ secret: 'SECRET' }));
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use('/', indexRouter);
 

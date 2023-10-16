@@ -1,0 +1,31 @@
+<%- include('../port/layout-start', { title: title }) %>
+<%- include('../port/menu', { title: title, addBookBtn: false, profileBtn: false }) %>
+
+<% if (errorText && errorText.length) { %>
+  <p class="text-center">
+    <span class="text-danger"><%= errorText %></span>
+  </p>
+<% } %>
+
+<form method="POST" class="row">
+  <div class="mb-3">
+    <label for="username" class="form-label">Имя пользователя</label>
+    <input type="text" name="username" class="form-control" id="username" placeholder="Введите имя пользователя" required>
+  </div>
+  <div class="mb-3">
+    <label for="password" class="form-label">Пароль</label>
+    <input type="password" name="password" class="form-control" id="password" placeholder="Введите пароль" required>
+  </div>
+  <div class="mb-3">
+    <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
+  </div>
+</form>
+
+<p class="text-center">
+  <span>Уже зарегистрированы?</span>
+  <a href="/user/login">
+    <span>Авторизация</span>
+  </a>
+</p>
+
+<%- include('../port/layout-end') %>

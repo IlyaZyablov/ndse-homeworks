@@ -1,0 +1,19 @@
+<%- include('../port/layout-start', { title: title }) %>
+<%- include('../port/menu', { title: title, addBookBtn: false, profileBtn: true }) %>
+
+<div class="card">
+  <div class="card-body">
+    <h5 class="card-title"><%= user.username %></h5>
+  </div>
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item">Какая-то информация</li>
+    <li class="list-group-item">Ещё какая-то информация</li>
+  </ul>
+  <div class="card-body">
+    <a href="/user/logout" class="card-link">
+      <button class="btn btn-outline-primary" type="button">Выйти из профиля</button>
+    </a>
+  </div>
+</div>
+
+<%- include('../port/layout-end') %>
